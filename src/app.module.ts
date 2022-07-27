@@ -26,7 +26,5 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       }),
     }),
   ],
-  controllers: [LessonsController],
-  providers: [LessonsService],
 })
 export class AppModule {}
