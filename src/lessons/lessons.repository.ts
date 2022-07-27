@@ -9,11 +9,11 @@ import { LessonField } from './lesson.enum';
 export class LessonsRepository extends Repository<Lesson> {
   private logger = new Logger('LessonRepository');
   async createLesson(createLessonDto: CreateLessonDto): Promise<Lesson> {
-    const { title, classNumber } = createLessonDto;
+    const { title, classNumber, field } = createLessonDto;
     const lesson = this.create({
       title,
       classNumber,
-      field: LessonField.default,
+      field,
       date: Date(),
     });
     try {

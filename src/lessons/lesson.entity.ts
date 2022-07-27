@@ -12,7 +12,7 @@ export class Lesson {
   @Column()
   classNumber: number;
 
-  @Column('enum')
+  @Column({ type: 'enum', default: LessonField.default, enum: LessonField })
   field: LessonField;
 
   @Column()
