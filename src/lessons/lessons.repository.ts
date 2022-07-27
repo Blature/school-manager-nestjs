@@ -1,5 +1,4 @@
 import { Logger } from '@nestjs/common';
-import { title } from 'process';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { Lesson } from './lesson.entity';

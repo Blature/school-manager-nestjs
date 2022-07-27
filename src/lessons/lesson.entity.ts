@@ -10,7 +10,7 @@ export class Lesson {
   title: string;
 
   @Column()
-  classNumber: number;
+  classNumber: string;
 
   @Column({ type: 'enum', default: LessonField.default, enum: LessonField })
   field: LessonField;
