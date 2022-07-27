@@ -1,3 +1,4 @@
+import { Logger } from '@nestjs/common';
 import { title } from 'process';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateLessonDto } from './dto/create-lesson.dto';
@@ -6,6 +7,7 @@ import { LessonField } from './lesson.enum';
 
 @EntityRepository(Lesson)
 export class LessonsRepository extends Repository<Lesson> {
+  private logger = new Logger('LessonRepository');
   async createLesson(createLessonDto: CreateLessonDto): Promise<Lesson> {
     const { title, classNumber } = createLessonDto;
     const lesson = this.create({
@@ -14,7 +16,14 @@ export class LessonsRepository extends Repository<Lesson> {
       field: LessonField.default,
       date: Date(),
     });
-    await this.save(lesson);
-    return lesson;
+    try {
+      await this.save(lesson);
+      this.logger.verbose(
+        `a Lesson with Title: ${lesson.title} and Field: ${lesson.field} created !`
+      );
+      return lesson;
+    } catch (err) {
+      this.logger.error(`We got An Error ${err.message}`);
+    }
   }
 }
