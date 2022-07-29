@@ -1,8 +1,8 @@
-import { Logger } from '@nestjs/common';
+import { InternalServerErrorException, Logger } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
 import { CreateLessonDto } from './dto/create-lesson.dto';
+import { GetFilterDto } from './dto/get-filter.dto';
 import { Lesson } from './lesson.entity';
-import { LessonField } from './lesson.enum';
 
 @EntityRepository(Lesson)
 export class LessonsRepository extends Repository<Lesson> {
@@ -23,6 +23,36 @@ export class LessonsRepository extends Repository<Lesson> {
       return lesson;
     } catch (err) {
       this.logger.error(`We got An Error ${err.message}`);
+    }
+  }
+
+  async getLessons(getFilterDto: GetFilterDto): Promise<Lesson[]> {
+    const { search, field } = getFilterDto;
+    const query = this.createQueryBuilder('lesson');
+
+    if (search) {
+      query.andWhere(
+        '(LOWER (lesson.title) LIKE LOWER (:search) OR LOWER (lesson.classNumber) LIKE LOWER (:search))',
+        { search: `%${search}%` }
+      );
+    }
+
+    if (field) {
+      query.andWhere('lesson.field = :field', { field });
+    }
+    try {
+      const lesson = await query.getMany();
+      this.logger.verbose(
+        `Search done! filters: ${JSON.stringify(getFilterDto)}`
+      );
+      return lesson;
+    } catch (err) {
+      this.logger.error(
+        `someone try to search with this filters : ${JSON.stringify(
+          getFilterDto
+        )} and we got an error ${err.message}`
+      );
+      throw new InternalServerErrorException();
     }
   }
 }

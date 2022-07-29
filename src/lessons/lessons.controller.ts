@@ -1,5 +1,6 @@
-import { Body, Controller, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common';
 import { CreateLessonDto } from './dto/create-lesson.dto';
+import { GetFilterDto } from './dto/get-filter.dto';
 import { Lesson } from './lesson.entity';
 import { LessonsService } from './lessons.service';
 
@@ -11,5 +12,10 @@ export class LessonsController {
   @Post()
   createLesson(@Body() createLessonDto: CreateLessonDto): Promise<Lesson> {
     return this.lessonsService.createLesson(createLessonDto);
+  }
+
+  @Get()
+  getLessons(@Query() getFilterDto: GetFilterDto): Promise<Lesson[]> {
+    return this.lessonsService.getLessons(getFilterDto);
   }
 }
