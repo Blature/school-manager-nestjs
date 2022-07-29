@@ -1,6 +1,5 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { FindRelationsNotFoundError } from 'typeorm';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { GetFilterDto } from './dto/get-filter.dto';
 import { Lesson } from './lesson.entity';
