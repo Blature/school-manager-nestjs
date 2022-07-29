@@ -1,14 +1,17 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Logger,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { GetFilterDto } from './dto/get-filter.dto';
+import { UpdateLessonDto } from './dto/update-lesson.dto';
 import { Lesson } from './lesson.entity';
 import { LessonsService } from './lessons.service';
 
@@ -30,5 +33,18 @@ export class LessonsController {
   @Get('/:id')
   getLessonById(@Param('id') id: string): Promise<Lesson> {
     return this.lessonsService.getLessonById(id);
+  }
+
+  @Delete('/:id')
+  deleteLesson(@Param('id') id: string): Promise<void> {
+    return this.lessonsService.deleteLesson(id);
+  }
+
+  @Put('/:id')
+  updateLesson(
+    @Param('id') id: string,
+    @Body() updateLessonDto: UpdateLessonDto
+  ) {
+    return this.lessonsService.updateLesson(id, updateLessonDto);
   }
 }
