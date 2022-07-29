@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Logger, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Logger,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { GetFilterDto } from './dto/get-filter.dto';
 import { Lesson } from './lesson.entity';
@@ -17,5 +25,10 @@ export class LessonsController {
   @Get()
   getLessons(@Query() getFilterDto: GetFilterDto): Promise<Lesson[]> {
     return this.lessonsService.getLessons(getFilterDto);
+  }
+
+  @Get('/:id')
+  getLessonById(@Param('id') id: string): Promise<Lesson> {
+    return this.lessonsService.getLessonById(id);
   }
 }
