@@ -5,6 +5,7 @@ import {
   MaxLength,
   MinLength,
 } from 'class-validator';
+import { UserRoll } from '../user-roll.enum';
 
 export class AuthCredentialsDto {
   @IsNotEmpty()
@@ -26,4 +27,6 @@ export class AuthCredentialsDto {
   @IsString()
   @MinLength(2)
   fullName: string;
+  
+  roll: UserRoll;
 }
