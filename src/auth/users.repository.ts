@@ -25,10 +25,10 @@ export class UsersRepository extends Repository<User> {
     });
     try {
       await this.save(user);
-      return user;
       this.logger.verbose(
         `a User with Username: "${user.username}", Name: "${user.fullName}", Roll: "${user.roll}"`
       );
+      return user;
     } catch (error) {
       if (error.code === '23505') {
         this.logger.error(`username: "${user.username}" already Exists !`);
