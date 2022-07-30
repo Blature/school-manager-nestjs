@@ -1,9 +1,8 @@
 import { Module } from '@nestjs/common';
-import { LessonsService } from './lessons/lessons.service';
-import { LessonsController } from './lessons/lessons.controller';
 import { LessonsModule } from './lessons/lessons.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -25,6 +24,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
         database: configService.get('DB_DATABASE'),
       }),
     }),
+    AuthModule,
   ],
 })
 export class AppModule {}
