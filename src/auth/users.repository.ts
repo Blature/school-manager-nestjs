@@ -4,7 +4,7 @@ import {
   Logger,
 } from '@nestjs/common';
 import { EntityRepository, Repository } from 'typeorm';
-import { AuthCredentialsDto } from './dto/auth-credentials.dto';
+import { AuthCredentialsDto } from './dto/auth-credentials-up.dto';
 import { User } from './user.entity';
 import * as bcrypt from 'bcrypt';
 
