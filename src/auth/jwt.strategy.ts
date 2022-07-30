@@ -9,8 +9,8 @@ import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
+  private logger = new Logger('JwtStrategy');
   constructor(
-    private logger = new Logger('JwtStrategy'),
     @InjectRepository(UsersRepository)
     private usersRepository: UsersRepository,
     private configService: ConfigService

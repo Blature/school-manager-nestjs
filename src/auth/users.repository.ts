@@ -11,7 +11,7 @@ import * as bcrypt from 'bcrypt';
 @EntityRepository(User)
 export class UsersRepository extends Repository<User> {
   private logger = new Logger('UsersRepository');
-  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<User> {
+  async createUser(authCredentialsDto: AuthCredentialsDto): Promise<void> {
     const { username, password, fullName, roll } = authCredentialsDto;
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -28,7 +28,6 @@ export class UsersRepository extends Repository<User> {
       this.logger.verbose(
         `a User with Username: "${user.username}", Name: "${user.fullName}", Roll: "${user.roll}"`
       );
-      return user;
     } catch (error) {
       if (error.code === '23505') {
         this.logger.error(`username: "${user.username}" already Exists !`);
