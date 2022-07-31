@@ -1,4 +1,6 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { User } from 'src/auth/user.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { LessonField } from './lesson.enum';
 
 @Entity()
@@ -17,4 +19,8 @@ export class Lesson {
 
   @Column()
   date: string;
+
+  @Exclude({ toPlainOnly: true })
+  @ManyToOne((_type) => User, (user) => user.lessons, { eager: false })
+  user: User;
 }

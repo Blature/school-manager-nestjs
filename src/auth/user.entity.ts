@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Lesson } from 'src/lessons/lesson.entity';
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRoll } from './user-roll.enum';
 
 @Entity()
@@ -20,4 +21,7 @@ export class User {
 
   @Column()
   date: string;
+
+  @OneToMany((_type) => Lesson, (lesson) => lesson.user, { eager: true })
+  lessons: Lesson[];
 }

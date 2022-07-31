@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { User } from 'src/auth/user.entity';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { GetFilterDto } from './dto/get-filter.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
@@ -19,16 +20,16 @@ export class LessonsService {
     private lessonRepository: LessonsRepository
   ) {}
 
-  createLesson(createLessonDto: CreateLessonDto): Promise<Lesson> {
-    return this.lessonRepository.createLesson(createLessonDto);
+  createLesson(createLessonDto: CreateLessonDto, user: User): Promise<Lesson> {
+    return this.lessonRepository.createLesson(createLessonDto, user);
   }
 
-  getLessons(getFilterDto: GetFilterDto): Promise<Lesson[]> {
-    return this.lessonRepository.getLessons(getFilterDto);
+  getLessons(getFilterDto: GetFilterDto, user: User): Promise<Lesson[]> {
+    return this.lessonRepository.getLessons(getFilterDto, user);
   }
 
-  async getLessonById(id: string): Promise<Lesson> {
-    const lesson = await this.lessonRepository.findOne({ id });
+  async getLessonById(id: string, user: User): Promise<Lesson> {
+    const lesson = await this.lessonRepository.findOne({ where: { id, user } });
 
     if (!lesson) {
       this.logger.error(`We cant Find Lesson with ID: ${id}`);
@@ -39,11 +40,11 @@ export class LessonsService {
     return lesson;
   }
 
-  async deleteLesson(id: string): Promise<void> {
-    await this.getLessonById(id);
+  async deleteLesson(id: string, user: User): Promise<void> {
+    await this.getLessonById(id, user);
     try {
       this.logger.verbose(`a Lesson With ID: ${id} has been deleted !`);
-      await this.lessonRepository.delete(id);
+      await this.lessonRepository.delete({ id, user });
     } catch (err) {
       this.logger.error(
         `Something went Wrong in deleting ${id} the error message : ${err.message}`
@@ -54,9 +55,10 @@ export class LessonsService {
 
   async updateLesson(
     id: string,
-    updateLessonDto: UpdateLessonDto
+    updateLessonDto: UpdateLessonDto,
+    user: User
   ): Promise<Lesson> {
-    const lesson = await this.getLessonById(id);
+    const lesson = await this.getLessonById(id, user);
     const { title, field, classNumber } = updateLessonDto;
 
     lesson.title = title;
