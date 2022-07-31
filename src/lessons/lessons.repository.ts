@@ -12,7 +12,6 @@ export class LessonsRepository extends Repository<Lesson> {
     createLessonDto: CreateLessonDto,
     user: User
   ): Promise<Lesson> {
-    
     const { title, classNumber, field } = createLessonDto;
     const lesson = this.create({
       title,

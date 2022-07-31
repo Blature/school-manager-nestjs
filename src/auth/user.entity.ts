@@ -1,4 +1,5 @@
 import { Lesson } from 'src/lessons/lesson.entity';
+import { Room } from 'src/rooms/room.entity';
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { UserRoll } from './user-roll.enum';
 
@@ -24,4 +25,7 @@ export class User {
 
   @OneToMany((_type) => Lesson, (lesson) => lesson.user, { eager: true })
   lessons: Lesson[];
+
+  @OneToMany((_type) => Room, (room) => room.user, { eager: true })
+  rooms: Room[];
 }

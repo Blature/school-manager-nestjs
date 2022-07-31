@@ -3,11 +3,10 @@ import { LessonsModule } from './lessons/lessons.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AuthModule } from './auth/auth.module';
-import { ClassesModule } from './classes/classes.module';
+import { RoomsModule } from './rooms/rooms.module';
 
 @Module({
   imports: [
-    LessonsModule,
     ConfigModule.forRoot({
       envFilePath: [`.env.stage.${process.env.STAGE}`],
     }),
@@ -25,8 +24,9 @@ import { ClassesModule } from './classes/classes.module';
         database: configService.get('DB_DATABASE'),
       }),
     }),
+    LessonsModule,
     AuthModule,
-    ClassesModule,
+    RoomsModule,
   ],
 })
 export class AppModule {}
