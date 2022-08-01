@@ -41,15 +41,22 @@ export class LessonsService {
   }
 
   async deleteLesson(id: string, user: User): Promise<void> {
-    await this.getLessonById(id, user);
-    try {
-      this.logger.verbose(`a Lesson With ID: ${id} has been deleted !`);
-      await this.lessonRepository.delete({ id, user });
-    } catch (err) {
-      this.logger.error(
-        `Something went Wrong in deleting ${id} the error message : ${err.message}`
+    if (user.roll === 'HeadMaster') {
+      await this.getLessonById(id, user);
+      try {
+        this.logger.verbose(`a Lesson With ID: ${id} has been deleted !`);
+        await this.lessonRepository.delete({ id, user });
+      } catch (err) {
+        this.logger.error(
+          `Something went Wrong in deleting ${id} the error message : ${err.message}`
+        );
+        throw new InternalServerErrorException();
+      }
+    } else {
+      this.logger.error(`You Do not have Permision to do this !`);
+      throw new InternalServerErrorException(
+        `You Do not have Permision to do this !`
       );
-      throw new InternalServerErrorException();
     }
   }
 

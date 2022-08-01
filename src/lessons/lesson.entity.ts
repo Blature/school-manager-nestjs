@@ -23,4 +23,7 @@ export class Lesson {
   @Exclude({ toPlainOnly: true })
   @ManyToOne((_type) => User, (user) => user.lessons, { eager: false })
   user: User;
+
+  @Column()
+  teacher: string;
 }

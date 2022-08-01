@@ -12,22 +12,29 @@ export class LessonsRepository extends Repository<Lesson> {
     createLessonDto: CreateLessonDto,
     user: User
   ): Promise<Lesson> {
-    const { title, classNumber, field } = createLessonDto;
-    const lesson = this.create({
-      title,
-      classNumber,
-      field,
-      date: Date(),
-      user,
-    });
-    try {
-      await this.save(lesson);
-      this.logger.verbose(
-        `a Lesson with Title: ${lesson.title} and Field: ${lesson.field} created !`
+    if (user.roll === 'HeadMaster') {
+      const { title, classNumber, field } = createLessonDto;
+      const lesson = this.create({
+        title,
+        classNumber,
+        field,
+        date: Date(),
+        user,
+      });
+      try {
+        await this.save(lesson);
+        this.logger.verbose(
+          `a Lesson with Title: ${lesson.title} and Field: ${lesson.field} created !`
+        );
+        return lesson;
+      } catch (err) {
+        this.logger.error(`We got An Error ${err.message}`);
+      }
+    } else {
+      this.logger.error(`You Do not have Permision to do this !`);
+      throw new InternalServerErrorException(
+        `You Do not have Permision to do this !`
       );
-      return lesson;
-    } catch (err) {
-      this.logger.error(`We got An Error ${err.message}`);
     }
   }
 
