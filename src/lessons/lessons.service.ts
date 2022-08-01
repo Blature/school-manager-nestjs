@@ -31,7 +31,7 @@ export class LessonsService {
     return this.lessonRepository.getLessons(getFilterDto, user);
   }
 
-  async getLessonById(id: string, user: User): Promise<Lesson> {
+  async getLessonById(id: string): Promise<Lesson> {
     const lesson = await this.lessonRepository.findOne({ where: { id } });
 
     if (!lesson) {
@@ -45,7 +45,7 @@ export class LessonsService {
 
   async deleteLesson(id: string, user: User): Promise<void> {
     if (user.roll === 'HeadMaster') {
-      await this.getLessonById(id, user);
+      await this.getLessonById(id);
       try {
         this.logger.verbose(`a Lesson With ID: ${id} has been deleted !`);
         await this.lessonRepository.delete({ id, user });
@@ -65,10 +65,9 @@ export class LessonsService {
 
   async updateLesson(
     id: string,
-    updateLessonDto: UpdateLessonDto,
-    user: User
+    updateLessonDto: UpdateLessonDto
   ): Promise<Lesson> {
-    const lesson = await this.getLessonById(id, user);
+    const lesson = await this.getLessonById(id);
     const { title, field, classNumber } = updateLessonDto;
 
     lesson.title = title;
@@ -101,8 +100,8 @@ export class LessonsService {
             `You Do not have Permision to do this`
           );
         } else {
-          const lesson = await this.getLessonById(lessonId, user);
-          this.logger.warn(lesson);
+          const lesson = await this.getLessonById(lessonId);
+
           lesson.teacher = userId;
           await this.lessonRepository.save(lesson);
           return lesson;

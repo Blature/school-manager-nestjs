@@ -26,4 +26,7 @@ export class Room {
   @Exclude({ toPlainOnly: true })
   @ManyToOne((_type) => User, (user) => user.lessons, { eager: false })
   user: User;
+
+  @Column({ array: true, type: 'text', default: [] })
+  lessons: string[];
 }

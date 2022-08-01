@@ -5,6 +5,7 @@ import {
   Get,
   Logger,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -58,5 +59,14 @@ export class RoomsController {
     @GetUser() user: User
   ) {
     return this.roomsService.updateRoom(id, updateRoomDto, user);
+  }
+
+  @Patch('/:roomId/:lessonId')
+  updateRoomTeacher(
+    @Param('roomId') roomId: string,
+    @Param('lessonId') lessonId: string,
+    @GetUser() user: User
+  ) {
+    return this.roomsService.updateRoomTeacher(roomId, lessonId, user);
   }
 }

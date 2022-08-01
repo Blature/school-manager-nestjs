@@ -43,11 +43,8 @@ export class LessonsController {
   }
 
   @Get('/:id')
-  getLessonById(
-    @Param('id') id: string,
-    @GetUser() user: User
-  ): Promise<Lesson> {
-    return this.lessonsService.getLessonById(id, user);
+  getLessonById(@Param('id') id: string): Promise<Lesson> {
+    return this.lessonsService.getLessonById(id);
   }
 
   @Delete('/:id')
@@ -58,10 +55,9 @@ export class LessonsController {
   @Put('/:id')
   updateLesson(
     @Param('id') id: string,
-    @Body() updateLessonDto: UpdateLessonDto,
-    @GetUser() user: User
+    @Body() updateLessonDto: UpdateLessonDto
   ) {
-    return this.lessonsService.updateLesson(id, updateLessonDto, user);
+    return this.lessonsService.updateLesson(id, updateLessonDto);
   }
 
   @Patch('/:userId/:lessonId')

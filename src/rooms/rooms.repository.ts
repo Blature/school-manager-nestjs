@@ -9,13 +9,14 @@ import { Room } from './room.entity';
 export class RoomsRepository extends Repository<Room> {
   private logger = new Logger('RoomsRepository');
   async createRoom(createRoomDto: CreateRoomDto, user: User): Promise<Room> {
-    const { name, description, classNumber, field } = createRoomDto;
+    const { name, description, classNumber, field, lessons } = createRoomDto;
     const room = this.create({
       name,
       description,
       classNumber,
       field,
       date: Date(),
+      lessons,
     });
     try {
       if (user.roll === 'HeadMaster') {

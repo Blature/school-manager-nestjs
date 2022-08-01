@@ -5,4 +5,5 @@ export class CreateRoomDto {
   description: string;
   classNumber: string;
   field: LessonField;
+  lessons?: string[];
 }
