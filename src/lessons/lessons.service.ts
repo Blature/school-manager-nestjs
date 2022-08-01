@@ -6,6 +6,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from 'src/auth/user.entity';
+import { UsersRepository } from 'src/auth/users.repository';
 import { CreateLessonDto } from './dto/create-lesson.dto';
 import { GetFilterDto } from './dto/get-filter.dto';
 import { UpdateLessonDto } from './dto/update-lesson.dto';
@@ -17,7 +18,9 @@ export class LessonsService {
   private logger = new Logger('LessonsService');
   constructor(
     @InjectRepository(LessonsRepository)
-    private lessonRepository: LessonsRepository
+    private lessonRepository: LessonsRepository,
+    @InjectRepository(UsersRepository)
+    private usersRepository: UsersRepository
   ) {}
 
   createLesson(createLessonDto: CreateLessonDto, user: User): Promise<Lesson> {
@@ -29,7 +32,7 @@ export class LessonsService {
   }
 
   async getLessonById(id: string, user: User): Promise<Lesson> {
-    const lesson = await this.lessonRepository.findOne({ where: { id, user } });
+    const lesson = await this.lessonRepository.findOne({ where: { id } });
 
     if (!lesson) {
       this.logger.error(`We cant Find Lesson with ID: ${id}`);
@@ -74,5 +77,42 @@ export class LessonsService {
 
     await this.lessonRepository.save(lesson);
     return lesson;
+  }
+
+  async updateLessonTeacher(
+    userId: string,
+    lessonId: string,
+    user: User
+  ): Promise<Lesson> {
+    if (user.roll === 'HeadMaster' || user.roll === 'Teacher') {
+      const char = await this.usersRepository.findOne({
+        where: { id: userId },
+      });
+
+      if (!char) {
+        this.logger.error(`Cant Find User ID !`);
+        throw new NotFoundException(`Cant Find User ID !`);
+      } else {
+        if ((await char).roll === 'HeadMaster') {
+          this.logger.error(
+            `You Do not have Permision to do this Only Teacher Roll Can be Teacher`
+          );
+          throw new InternalServerErrorException(
+            `You Do not have Permision to do this`
+          );
+        } else {
+          const lesson = await this.getLessonById(lessonId, user);
+          this.logger.warn(lesson);
+          lesson.teacher = userId;
+          await this.lessonRepository.save(lesson);
+          return lesson;
+        }
+      }
+    } else {
+      this.logger.error(`You Do not have Permision to do this`);
+      throw new InternalServerErrorException(
+        `You Do not have Permision to do this`
+      );
+    }
   }
 }

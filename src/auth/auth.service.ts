@@ -34,7 +34,7 @@ export class AuthService {
       if (user && (await bcrypt.compare(password, user.password))) {
         const payload: JwtPayload = { username };
         const accessToken: string = await this.jwtService.sign(payload);
-        this.logger.verbose(`"${username}" logged in!`);
+        this.logger.verbose(`"${username}" logged in! (Roll: "${user.roll}")`);
         return { accessToken };
       } else {
         throw new UnauthorizedException(

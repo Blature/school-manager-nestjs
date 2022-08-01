@@ -4,4 +4,5 @@ export class CreateLessonDto {
   title: string;
   classNumber: string;
   field: LessonField;
+  teacher?: string = '';
 }

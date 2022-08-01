@@ -1,4 +1,5 @@
 import { Exclude } from 'class-transformer';
+import { IsOptional } from 'class-validator';
 import { User } from 'src/auth/user.entity';
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { LessonField } from './lesson.enum';
@@ -24,6 +25,6 @@ export class Lesson {
   @ManyToOne((_type) => User, (user) => user.lessons, { eager: false })
   user: User;
 
-  @Column()
+  @Column({ default: '' })
   teacher: string;
 }

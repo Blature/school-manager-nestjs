@@ -5,6 +5,7 @@ import {
   Get,
   Logger,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -61,5 +62,14 @@ export class LessonsController {
     @GetUser() user: User
   ) {
     return this.lessonsService.updateLesson(id, updateLessonDto, user);
+  }
+
+  @Patch('/:userId/:lessonId')
+  updateLessonTeacher(
+    @Param('userId') userId: string,
+    @Param('lessonId') lessonId: string,
+    @GetUser() user: User
+  ) {
+    return this.lessonsService.updateLessonTeacher(userId, lessonId, user);
   }
 }
